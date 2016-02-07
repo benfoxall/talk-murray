@@ -124,14 +124,18 @@
       show(t)
     }
 
-    recognition.start()
 
+    start.addEventListener('click', function(){
+      recognition.start()
+      start.style.display = 'none'
+    }, false)
 
-    test = "William James Bill Murray born September 21st 1950  is an American actor comedian and writer this is the best like dude the First games expo so you're on Saturday Night Live for which he and his first Emmy Award and comedy films including meatballs  Caddyshack nicely stripes Ghostbusters Scrooge  directed quick change  later in his career sorry in Lost in Translation  golden cockapoo batter Award for best actor  as well as an Academy Award nomination for best actor  nominations for his role in Ghostbusters Rushmore  2012  St Vincent's 2014  military olive kitteridge cool  what about Bob  Groundhog Day  Groundhog Day and holiday  Groundhog Day  Groundhog Day  meatballs  William  James  this is".split(' ')
-
-    for (var i = 0; i < test.length; i++) {
-#      setTimeout(show, i * 100, test.slice(0, i).join(' '))
-    }
+// 
+//     test = "William James Bill Murray born September 21st 1950  is an American actor comedian and writer this is the best like dude the First games expo so you're on Saturday Night Live for which he and his first Emmy Award and comedy films including meatballs  Caddyshack nicely stripes Ghostbusters Scrooge  directed quick change  later in his career sorry in Lost in Translation  golden cockapoo batter Award for best actor  as well as an Academy Award nomination for best actor  nominations for his role in Ghostbusters Rushmore  2012  St Vincent's 2014  military olive kitteridge cool  what about Bob  Groundhog Day  Groundhog Day and holiday  Groundhog Day  Groundhog Day  meatballs  William  James  this is".split(' ')
+//
+//     for (var i = 0; i < test.length; i++) {
+// #      setTimeout(show, i * 100, test.slice(0, i).join(' '))
+//     }
 
 
     </script>
