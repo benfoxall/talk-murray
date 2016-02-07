@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Speech thing</title>
+    <style media="screen">
+      body {
+        font-size:300%;
+        font-size: 4vmin;
+        font-family: sans-serif;
+        line-height: 140%
+      }
+      .token {
+        transition: all .5s
+      }
+      button {
+        text-align: center;
+        border: none;
+        background: #fff
+      }
+      button svg {
+        width: 10em;
+        width: 20vw;
+      }
+      #go {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="go">
+      <button id="start">
+        <svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"><path fill="#08f" d="M464.5 53.5q184.5 0 315.5 131t131 315.5 -131 315.5 -315.5 131 -315.5 -131 -131 -315.5 131 -315.5 315.5 -131zm-166.5 670l446 -224 -446 -223l0 447z"/></svg>
+      </button>
+    </path>
+
+    <p id="p">
+      William James "Bill" Murray (born September 21, 1950) is an American actor, comedian, and writer. He first gained exposure on Saturday Night Live, for which he earned his first Emmy Award and later went on to star in comedy films, including Meatballs (1979), Caddyshack (1980), Stripes (1981), Tootsie (1982), Ghostbusters (1984), Scrooged (1988), What About Bob? (1991), and Groundhog Day (1993). He also co-directed Quick Change (1990). Murray garnered additional critical acclaim later in his career, starring in Lost in Translation (2003), which earned him a Golden Globe and a BAFTA Award for Best Actor, as well as an Academy Award nomination for Best Actor. He also received Golden Globe nominations for his roles in Ghostbusters, Rushmore (1998), Hyde Park on Hudson (2012), St. Vincent (2014), and the HBO miniseries Olive Kitteridge (2014), for which he later won his second Primetime Emmy Award.
+    </p>
+
+    <script type="text/javascript">
+
+    ['SpeechRecognition', 'SpeechGrammarList'].forEach(function(n){
+      window[n] = window[n] || window['webkit' + n]
+    })
+
+
+    // split into tokens todo: treewalker
+    var tokens = []
+
+    var n = p.childNodes[0]
+    var spans = n.textContent
+      .split(/\b/)
+      .map(function(s){
+          var span = document.createElement('span')
+          span.textContent = s
+          if(s.trim()) {
+            span.className = 'token'
+            span.dataset.token = s.toLowerCase()
+            tokens.push(span)
+          }
+          return span
+      })
+      .forEach(function(span){
+        p.appendChild(span)
+      })
+
+    p.removeChild(n)
+
+
+    function show(text) {
+      // first pass, score tokens
+      var scores = {}, s = 1
+
+      text.split(/\b/)
+        .filter(function(d){
+          return d.trim()
+        })
+        .reverse()
+        .forEach(function(d){
+          d = d.toLowerCase()
+          // console.log(d)
+          if(!scores[d]){
+            scores[d] = s
+          }
+          s *= 0.8
+        })
+
+        console.log(scores);
+
+
+      tokens.forEach(function(node){
+        var s =  0
+        if(scores[node.dataset.token]){
+          s = 0.1 + (0.9* scores[node.dataset.token])
+        }
+
+        if(s == 1) {
+            node.style.backgroundColor = 'rgba(255, 0, 150, 1)'
+        } else {
+            node.style.backgroundColor = 'rgba(0, 150, 255, '+s.toFixed(2)+')'
+        }
+
+      })
+
+
+    }
+
+    var recognition = new webkitSpeechRecognition();
+
+
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+
+    recognition.onstart = console.log.bind(console, 'start')
+    recognition.onerror = console.error.bind(console)
+    recognition.onend = console.log.bind(console, 'end')
+
+
+    recognition.onresult = function(e){
+      var t = [].map.call(e.results, function(d){return d[0].transcript}).join(' ')
+      console.log(t)
+      show(t)
+    }
+
+    recognition.start()
+
+
+    test = "William James Bill Murray born September 21st 1950  is an American actor comedian and writer this is the best like dude the First games expo so you're on Saturday Night Live for which he and his first Emmy Award and comedy films including meatballs  Caddyshack nicely stripes Ghostbusters Scrooge  directed quick change  later in his career sorry in Lost in Translation  golden cockapoo batter Award for best actor  as well as an Academy Award nomination for best actor  nominations for his role in Ghostbusters Rushmore  2012  St Vincent's 2014  military olive kitteridge cool  what about Bob  Groundhog Day  Groundhog Day and holiday  Groundhog Day  Groundhog Day  meatballs  William  James  this is".split(' ')
+
+    for (var i = 0; i < test.length; i++) {
+#      setTimeout(show, i * 100, test.slice(0, i).join(' '))
+    }
+
+
+    </script>
+  </body>
+</html>
